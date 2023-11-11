@@ -32,11 +32,11 @@ export const UIShell: React.FC<UIShellProps> = ({ content }) => {
 
   return (
     <>
-      <Header aria-label="IBM Platform Name">
+      <Header aria-label="Calidad de Software">
         <SkipToContent />
         <HeaderName
           href="/"
-          prefix="Carbon + Next.js"
+          prefix="Calidad de Software"
           onClick={(
             event: React.SyntheticEvent<HTMLAnchorElement, MouseEvent>,
           ) => {
@@ -60,11 +60,19 @@ export const UIShell: React.FC<UIShellProps> = ({ content }) => {
           height: '100%',
         }}
       >
-        <Grid>
-          <Row>
-            <Column>{content}</Column>
-          </Row>
-        </Grid>
+        {/*<Grid>*/}
+        {/*  <Row>*/}
+        {/*    <Column>{content}</Column>*/}
+        {/*  </Row>*/}
+        {/*</Grid>*/}
+        <div
+          style={{
+            width: '80%',
+            margin: '0 auto',
+          }}
+        >
+          {content}
+        </div>
       </Content>
     </>
   );
