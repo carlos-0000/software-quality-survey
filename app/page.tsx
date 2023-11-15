@@ -7,13 +7,14 @@ import {
   TextInput,
   Button,
   TextArea,
+  // @ts-ignore
   Stack,
   Grid,
   Column,
   DatePicker,
   DatePickerInput,
 } from '@carbon/react';
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import ParticipantsForm from '@/components/participants-form/participants-form';
 import { useSoftware } from '@/contexts';
 
@@ -25,14 +26,16 @@ const HomePage = () => {
 
   const { softwareInfo, updateSoftwareInfo } = useSoftware();
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     updateSoftwareInfo({
       ...softwareInfo,
       [e.target.id]: e.target.value,
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(softwareInfo);
     push('/encuesta');
@@ -119,6 +122,7 @@ const HomePage = () => {
               />
             </div>
 
+            <h3>Participantes</h3>
             <div style={{ width: '100%' }}>
               <ParticipantsForm />
             </div>

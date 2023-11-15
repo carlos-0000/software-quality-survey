@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   TextInput,
   Button,
-  DataTable,
   TableContainer,
   Table,
   TableHead,
@@ -10,6 +9,7 @@ import {
   TableHeader,
   TableBody,
   TableCell,
+  // @ts-ignore
   Stack,
 } from '@carbon/react';
 import { useSoftware } from '@/contexts';
@@ -30,6 +30,9 @@ const ParticipantsForm = () => {
   };
 
   const addParticipant = () => {
+    if (!newParticipant.position || !newParticipant.name) {
+      return;
+    }
     updateParticipants([...participants, newParticipant]);
     setNewParticipant({ position: '', name: '', signature: '' }); // Reset form after adding
   };
@@ -50,13 +53,13 @@ const ParticipantsForm = () => {
     <Stack gap={5} style={{ width: '100%' }}>
       <TextInput
         id="new-participant-position"
-        labelText="Cargo"
+        labelText="Cargo*"
         value={newParticipant.position}
         onChange={(e) => handleNewParticipantChange('position', e.target.value)}
       />
       <TextInput
         id="new-participant-name"
-        labelText="Nombre"
+        labelText="Nombre*"
         value={newParticipant.name}
         onChange={(e) => handleNewParticipantChange('name', e.target.value)}
       />

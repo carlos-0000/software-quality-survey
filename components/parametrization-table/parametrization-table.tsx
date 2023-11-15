@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Accordion,
   AccordionItem,
@@ -16,9 +16,20 @@ import { useSoftware } from '@/contexts'; // Asegúrate de importar correctament
 
 const ParametrizationTable = () => {
   const { parametrization, updateParameter } = useSoftware();
+  const [totalError, setTotalError] = useState(false);
 
-  const handlePercentageChange = (id, value) => {
+  useEffect(() => {
+    // Calcula el total cada vez que se actualiza la parametrización
+    const totalPercentage = parametrization.reduce(
+      (acc, param) => acc + param.totalPercentage,
+      0,
+    );
+    setTotalError(totalPercentage !== 100);
+  }, [parametrization]);
+
+  const handlePercentageChange = (id: number, value: string) => {
     const percentage = parseFloat(value);
+    // Actualiza el parámetro independientemente del error para permitir cambios
     if (!isNaN(percentage) && percentage >= 0 && percentage <= 100) {
       updateParameter(id, percentage);
     }
@@ -26,11 +37,7 @@ const ParametrizationTable = () => {
 
   return (
     <Accordion>
-      <AccordionItem
-        title="Parametrización Tabla"
-        style={{ overflow: 'hidden' }}
-        defaultExpanded
-      >
+      <AccordionItem open={false} title="Parametrización Tabla">
         <TableContainer
           title="Parametrización Tabla"
           style={{ overflowX: 'auto' }}
@@ -55,6 +62,8 @@ const ParametrizationTable = () => {
                   <TableCell>
                     <TextInput
                       id={`percentage-${param.id}`}
+                      labelText={'ssss'}
+                      hideLabel
                       value={param.totalPercentage.toString()}
                       onChange={(e) =>
                         handlePercentageChange(param.id, e.target.value)
@@ -64,14 +73,25 @@ const ParametrizationTable = () => {
                       }
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
-                          e.target.blur();
+                          (e.target as HTMLInputElement).blur();
                         }
                       }}
                       size="sm"
+                      invalid={totalError}
+                      invalidText=""
                     />
                   </TableCell>
                 </TableRow>
               ))}
+              <TableRow>
+                <TableCell colSpan={4}>Total</TableCell>
+                <TableCell style={{ color: totalError ? 'red' : 'inherit' }}>
+                  {parametrization
+                    .reduce((acc, param) => acc + param.totalPercentage, 0)
+                    .toFixed(2)}
+                  %
+                </TableCell>
+              </TableRow>
             </TableBody>
           </Table>
         </TableContainer>

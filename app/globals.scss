@@ -20,3 +20,7 @@ body {
   background: styles.$background;
   color: styles.$text-primary;
 }
+
+.cds--accordion__content {
+  padding: 0 !important;
+}

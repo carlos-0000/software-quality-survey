@@ -44,7 +44,9 @@ export const UIShell: React.FC<UIShellProps> = ({ content }) => {
             event.preventDefault();
             push('/');
           }}
-        />
+        >
+          USCO PRO 4K
+        </HeaderName>
         <HeaderGlobalBar>
           <HeaderGlobalAction
             aria-label="Toggle theme"
