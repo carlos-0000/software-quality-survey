@@ -1,67 +1,110 @@
-import { useState } from 'react';
-import { TextInput, Button } from '@carbon/react';
+import React, { useState } from 'react';
+import {
+  TextInput,
+  Button,
+  DataTable,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableHeader,
+  TableBody,
+  TableCell,
+  Stack,
+} from '@carbon/react';
+import { useSoftware } from '@/contexts';
 
-const ParticipantsForm = ({ onParticipantsChange }) => {
-  const [participants, setParticipants] = useState([
-    { position: '', name: '', signature: '' },
-  ]);
+const ParticipantsForm = () => {
+  const { participants, updateParticipants } = useSoftware();
+  const [newParticipant, setNewParticipant] = useState({
+    position: '',
+    name: '',
+    signature: '',
+  });
 
-  const handleParticipantChange = (index, field, value) => {
-    const newParticipants = [...participants];
-    newParticipants[index][field] = value;
-    setParticipants(newParticipants);
-    onParticipantsChange(newParticipants); // Esta función propaga los cambios al estado del componente padre
+  const handleNewParticipantChange = (field: string, value: string) => {
+    setNewParticipant((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
 
   const addParticipant = () => {
-    setParticipants([
-      ...participants,
-      { position: '', name: '', signature: '' },
-    ]);
+    updateParticipants([...participants, newParticipant]);
+    setNewParticipant({ position: '', name: '', signature: '' }); // Reset form after adding
   };
 
-  const removeParticipant = (index) => {
+  const removeParticipant = (index: number) => {
     const newParticipants = participants.filter((_, i) => i !== index);
-    setParticipants(newParticipants);
-    onParticipantsChange(newParticipants); // Esta función propaga los cambios al estado del componente padre
+    updateParticipants(newParticipants);
   };
+
+  const headers = [
+    { key: 'position', header: 'Cargo' },
+    { key: 'name', header: 'Nombre' },
+    { key: 'signature', header: 'Firma' },
+    { header: 'Acciones' },
+  ];
 
   return (
-    <div>
-      {participants.map((participant, index) => (
-        <div key={index} style={{ marginBottom: '1rem' }}>
-          <TextInput
-            id={`position-${index}`}
-            labelText="Cargo"
-            value={participant.position}
-            onChange={(e) =>
-              handleParticipantChange(index, 'position', e.target.value)
-            }
-          />
-          <TextInput
-            id={`name-${index}`}
-            labelText="Nombre"
-            value={participant.name}
-            onChange={(e) =>
-              handleParticipantChange(index, 'name', e.target.value)
-            }
-          />
-          <TextInput
-            id={`signature-${index}`}
-            labelText="Firma"
-            value={participant.signature}
-            onChange={(e) =>
-              handleParticipantChange(index, 'signature', e.target.value)
-            }
-            // Aquí podrías reemplazar este TextInput por un componente de carga de archivos o firma digital
-          />
-          <Button kind="danger" onClick={() => removeParticipant(index)}>
-            Eliminar
-          </Button>
-        </div>
-      ))}
+    <Stack gap={5} style={{ width: '100%' }}>
+      <TextInput
+        id="new-participant-position"
+        labelText="Cargo"
+        value={newParticipant.position}
+        onChange={(e) => handleNewParticipantChange('position', e.target.value)}
+      />
+      <TextInput
+        id="new-participant-name"
+        labelText="Nombre"
+        value={newParticipant.name}
+        onChange={(e) => handleNewParticipantChange('name', e.target.value)}
+      />
+      <TextInput
+        id="new-participant-signature"
+        labelText="Firma"
+        value={newParticipant.signature}
+        onChange={(e) =>
+          handleNewParticipantChange('signature', e.target.value)
+        }
+      />
       <Button onClick={addParticipant}>Agregar Participante</Button>
-    </div>
+
+      <TableContainer title="Participantes">
+        <Table>
+          <TableHead>
+            <TableRow>
+              {headers.map((header) => (
+                <TableHeader key={header.key}>{header.header}</TableHeader>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {!participants || participants.length === 0 ? (
+              <TableRow>
+                <TableCell>No hay participantes</TableCell>
+              </TableRow>
+            ) : (
+              participants.map((participant, index) => (
+                <TableRow key={index}>
+                  <TableCell>{participant.position}</TableCell>
+                  <TableCell>{participant.name}</TableCell>
+                  <TableCell>{participant.signature}</TableCell>
+                  <TableCell>
+                    <Button
+                      kind="danger"
+                      onClick={() => removeParticipant(index)}
+                    >
+                      Eliminar
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Stack>
   );
 };
 

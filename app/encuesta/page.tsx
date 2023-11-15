@@ -1,7 +1,16 @@
-export default function Page() {
+'use client';
+
+import ParametrizationTable from '@/components/parametrization-table/parametrization-table';
+import { AnswersComponent } from '@/components';
+import { NextPage } from 'next';
+
+const Page: NextPage = () => {
   return (
-    <div>
-      <h1>Encuesta</h1>
-    </div>
+    <>
+      <ParametrizationTable />
+      <AnswersComponent />
+    </>
   );
-}
+};
+
+export default Page;

@@ -25,6 +25,7 @@ export const UIShell: React.FC<UIShellProps> = ({ content }) => {
   const isLight = theme === 'white' || theme === 'g10';
 
   useEffect(() => {
+    console.log('theme', theme);
     if (theme) {
       document.documentElement.setAttribute('data-carbon-theme', theme);
     }
@@ -65,14 +66,7 @@ export const UIShell: React.FC<UIShellProps> = ({ content }) => {
         {/*    <Column>{content}</Column>*/}
         {/*  </Row>*/}
         {/*</Grid>*/}
-        <div
-          style={{
-            width: '80%',
-            margin: '0 auto',
-          }}
-        >
-          {content}
-        </div>
+        {content}
       </Content>
     </>
   );
