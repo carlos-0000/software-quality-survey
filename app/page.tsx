@@ -163,15 +163,17 @@ const HomePage = () => {
                 invalidText={errors.phone || ''}
                 maxLength={255}
               />
-              <TextInput
-                id="softwareName"
-                labelText="Nombre del Software"
-                value={softwareInfo.softwareName}
-                onChange={handleChange}
-                invalid={!!errors.softwareName}
-                invalidText={errors.softwareName || ''}
-                maxLength={255}
-              />
+              <div style={{ gridColumn: '1 / 3' }}>
+                <TextInput
+                  id="softwareName"
+                  labelText="Nombre del Software"
+                  value={softwareInfo.softwareName}
+                  onChange={handleChange}
+                  invalid={!!errors.softwareName}
+                  invalidText={errors.softwareName || ''}
+                  maxLength={255}
+                />
+              </div>
               <div style={{ gridColumn: '1 / 3' }}>
                 <TextArea
                   id="generalObjectives"
