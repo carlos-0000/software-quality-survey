@@ -64,7 +64,7 @@ export const UIShell: React.FC<UIShellProps> = ({ content }) => {
           </HeaderGlobalAction>
         </HeaderGlobalBar>
       </Header>
-      <Content id="main-content" style={{ height: '100%' }}>
+      <Content id="main-content" style={{ height: 'calc(100dvh - 3rem)' }}>
         {content}
       </Content>
     </>

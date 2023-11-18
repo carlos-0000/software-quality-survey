@@ -6,10 +6,12 @@ import { NextPage } from 'next';
 
 const Page: NextPage = () => {
   return (
-    <>
+    <div
+      style={{ display: 'grid', gridTemplateRows: 'auto 1fr', height: '100%' }}
+    >
       <ParametrizationTable />
       <AnswersComponent />
-    </>
+    </div>
   );
 };
 
