@@ -1,4 +1,3 @@
-// @ts-nocheck
 'use client';
 // import { Button } from '@carbon/react';
 //import { NextPage } from 'next';
@@ -22,15 +21,11 @@ import { useSoftware } from '@/contexts';
 const HomePage = () => {
   const { push } = useRouter();
   const { softwareInfo, updateSoftwareInfo } = useSoftware();
-  const [errors, setErrors] = useState({}); // Estado para manejar errores de validación
-  console.log(softwareInfo.date); //7/11/2023
-
-  const [date, setDate] = useState(
-    softwareInfo.date ? new Date(softwareInfo.date) : '',
-  );
+  const [errors, setErrors] = useState<{ [key: string]: string }>({}); // Estado para manejar errores de validación
 
   const validateForm = () => {
-    const newErrors = {};
+    console.log(softwareInfo);
+    const newErrors: typeof errors = {};
 
     // Validaciones
     if (!softwareInfo.date) {
@@ -69,16 +64,14 @@ const HomePage = () => {
     });
     // Limpiar errores de validación al cambiar
     if (errors[e.target.id]) {
-      setErrors({ ...errors, [e.target.id]: undefined });
+      setErrors({ ...errors, [e.target.id]: '' });
     }
   };
 
-  const handleDateChange = (eventOrDate: string | Date | null) => {
-    console.log(eventOrDate);
-    setDate(eventOrDate);
+  const handleDateChange = ([date1]: Date[]) => {
     updateSoftwareInfo({
       ...softwareInfo,
-      date: eventOrDate,
+      date: date1.toLocaleDateString(),
     });
   };
 
@@ -100,108 +93,113 @@ const HomePage = () => {
         <Stack gap={7}>
           <header>
             <Stack gap={5}>
-              <h1>PLANTILLA EVALUACION</h1>
-              <p>
-                Este aplicativo es una herramienta interactiva diseñada para
-                facilitar la evaluación y calificación de software en diversos
-                aspectos clave como rendimiento y calidad. Utilizando una
-                plantilla de evaluación estructurada, los evaluadores pueden
-                sistemáticamente revisar y puntuar el software según criterios
-                predefinidos que reflejan los objetivos generales y específicos
-                del software en cuestión.
-              </p>
+              <h1>Plantilla Evaluación</h1>
+              <div
+                style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}
+              >
+                <img
+                  src="/img/bg.png"
+                  alt="Imagen representativa del proyecto genrada con inteligencia artificial para el proyecto USCO"
+                  style={{ maxWidth: '40%' }}
+                />
+                <p>
+                  Este aplicativo es una herramienta interactiva diseñada para
+                  facilitar la evaluación y calificación de software en diversos
+                  aspectos clave como rendimiento y calidad. Utilizando una
+                  plantilla de evaluación estructurada, los evaluadores pueden
+                  sistemáticamente revisar y puntuar el software según criterios
+                  predefinidos que reflejan los objetivos generales y
+                  específicos del software en cuestión.
+                </p>
+              </div>
             </Stack>
           </header>
 
           <Form onSubmit={handleSubmit}>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gridGap: '1rem',
-              }}
-            >
-              <DatePicker
-                datePickerType="single"
-                onChange={(eventOrDate) =>
-                  handleDateChange(eventOrDate[0].toLocaleDateString())
-                }
-                style={{ width: '100%' }}
+            <Stack gap={7}>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gridGap: '1rem',
+                }}
               >
-                <DatePickerInput
-                  id="date"
-                  labelText="Fecha"
-                  value={date}
-                  invalid={!!errors.date}
-                  invalidText={errors.date || ''}
-                />
-              </DatePicker>
-              <TextInput
-                id="city"
-                labelText="Ciudad"
-                value={softwareInfo.city}
-                onChange={handleChange}
-                invalid={!!errors.city}
-                invalidText={errors.city || ''}
-                maxLength={255}
-              />
-              <TextInput
-                id="company"
-                labelText="Empresa"
-                value={softwareInfo.company}
-                onChange={handleChange}
-                invalid={!!errors.company}
-                invalidText={errors.company || ''}
-                maxLength={255}
-              />
-              <TextInput
-                id="phone"
-                labelText="Teléfono"
-                value={softwareInfo.phone}
-                onChange={handleChange}
-                invalid={!!errors.phone}
-                invalidText={errors.phone || ''}
-                maxLength={255}
-              />
-              <div style={{ gridColumn: '1 / 3' }}>
+                <DatePicker
+                  datePickerType="single"
+                  onChange={handleDateChange}
+                  style={{ width: '100%' }}
+                >
+                  <DatePickerInput
+                    id="date"
+                    labelText="Fecha"
+                    invalid={!!errors.date}
+                    invalidText={errors.date || ''}
+                  />
+                </DatePicker>
                 <TextInput
-                  id="softwareName"
-                  labelText="Nombre del Software"
-                  value={softwareInfo.softwareName}
+                  id="city"
+                  labelText="Ciudad"
+                  value={softwareInfo.city}
                   onChange={handleChange}
-                  invalid={!!errors.softwareName}
-                  invalidText={errors.softwareName || ''}
+                  invalid={!!errors.city}
+                  invalidText={errors.city || ''}
                   maxLength={255}
                 />
-              </div>
-              <div style={{ gridColumn: '1 / 3' }}>
-                <TextArea
-                  id="generalObjectives"
-                  labelText="Objetivos Generales del Software"
-                  value={softwareInfo.generalObjectives}
+                <TextInput
+                  id="company"
+                  labelText="Empresa"
+                  value={softwareInfo.company}
                   onChange={handleChange}
-                  invalid={!!errors.generalObjectives}
-                  invalidText={errors.generalObjectives || ''}
+                  invalid={!!errors.company}
+                  invalidText={errors.company || ''}
+                  maxLength={255}
                 />
-              </div>
-              <div style={{ gridColumn: '1 / 3' }}>
-                <TextArea
-                  id="specificObjectives"
-                  labelText="Objetivos Específicos del Software"
-                  value={softwareInfo.specificObjectives}
+                <TextInput
+                  id="phone"
+                  labelText="Teléfono"
+                  value={softwareInfo.phone}
                   onChange={handleChange}
-                  invalid={!!errors.specificObjectives}
-                  invalidText={errors.specificObjectives || ''}
+                  invalid={!!errors.phone}
+                  invalidText={errors.phone || ''}
+                  maxLength={255}
                 />
+                <div style={{ gridColumn: '1 / 3' }}>
+                  <TextInput
+                    id="softwareName"
+                    labelText="Nombre del Software"
+                    value={softwareInfo.softwareName}
+                    onChange={handleChange}
+                    invalid={!!errors.softwareName}
+                    invalidText={errors.softwareName || ''}
+                    maxLength={255}
+                  />
+                </div>
+                <div style={{ gridColumn: '1 / 3' }}>
+                  <TextArea
+                    id="generalObjectives"
+                    labelText="Objetivos Generales del Software"
+                    value={softwareInfo.generalObjectives}
+                    onChange={handleChange}
+                    invalid={!!errors.generalObjectives}
+                    invalidText={errors.generalObjectives || ''}
+                  />
+                </div>
+                <div style={{ gridColumn: '1 / 3' }}>
+                  <TextArea
+                    id="specificObjectives"
+                    labelText="Objetivos Específicos del Software"
+                    value={softwareInfo.specificObjectives}
+                    onChange={handleChange}
+                    invalid={!!errors.specificObjectives}
+                    invalidText={errors.specificObjectives || ''}
+                  />
+                </div>
               </div>
-            </div>
 
-            <h3>Participantes</h3>
-            <div style={{ width: '100%' }}>
               <ParticipantsForm />
-            </div>
 
-            <Button type="submit">Empezar</Button>
+              <Button type="submit">Empezar</Button>
+            </Stack>
           </Form>
         </Stack>
       </Column>
