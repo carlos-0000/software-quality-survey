@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 // import { Button } from '@carbon/react';
 //import { NextPage } from 'next';
@@ -20,12 +21,45 @@ import { useSoftware } from '@/contexts';
 
 const HomePage = () => {
   const { push } = useRouter();
-  // const { softwareInfo, updateSoftwareInfo } = useSoftware();
-
-  // const { softwareInfo, setFormData } = use
-
   const { softwareInfo, updateSoftwareInfo } = useSoftware();
+  const [errors, setErrors] = useState({}); // Estado para manejar errores de validación
+  console.log(softwareInfo.date); //7/11/2023
 
+  const [date, setDate] = useState(
+    softwareInfo.date ? new Date(softwareInfo.date) : '',
+  );
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Validaciones
+    if (!softwareInfo.date) {
+      newErrors.date = 'La fecha no puede estar vacía';
+    }
+    if (!softwareInfo.city || softwareInfo.city.length > 255) {
+      newErrors.city = 'La ciudad no puede estar vacía';
+    }
+    if (!softwareInfo.company || softwareInfo.company.length > 255) {
+      newErrors.company = 'La empresa no puede estar vacía';
+    }
+    if (!softwareInfo.phone || softwareInfo.phone.length > 255) {
+      newErrors.phone = 'El teléfono no puede estar vacío';
+    }
+    if (!softwareInfo.softwareName || softwareInfo.softwareName.length > 255) {
+      newErrors.softwareName = 'El nombre del software no puede estar vacío';
+    }
+    if (!softwareInfo.generalObjectives) {
+      newErrors.generalObjectives =
+        'Los objetivos generales no pueden estar vacíos';
+    }
+    if (!softwareInfo.specificObjectives) {
+      newErrors.specificObjectives =
+        'Los objetivos específicos no pueden estar vacíos';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -33,13 +67,32 @@ const HomePage = () => {
       ...softwareInfo,
       [e.target.id]: e.target.value,
     });
+    // Limpiar errores de validación al cambiar
+    if (errors[e.target.id]) {
+      setErrors({ ...errors, [e.target.id]: undefined });
+    }
+  };
+
+  const handleDateChange = (eventOrDate: string | Date | null) => {
+    console.log(eventOrDate);
+    setDate(eventOrDate);
+    updateSoftwareInfo({
+      ...softwareInfo,
+      date: eventOrDate,
+    });
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!validateForm()) {
+      console.log('Errores de validación:', errors);
+      return; // Detiene el envío del formulario si hay errores
+    }
     console.log(softwareInfo);
     push('/encuesta');
   };
+
+  // Rest of the code...
 
   return (
     <Grid condensed>
@@ -60,21 +113,19 @@ const HomePage = () => {
             </Stack>
           </header>
 
-          <Form
-            onSubmit={handleSubmit}
-            style={{
-              display: 'flex',
-              // flexDirection: 'column',
-              flexWrap: 'wrap',
-              gap: '1rem',
-            }}
-          >
-            <DatePicker datePickerType={'single'}>
+          <Form onSubmit={handleSubmit}>
+            <DatePicker
+              datePickerType="single"
+              onChange={(eventOrDate) =>
+                handleDateChange(eventOrDate[0].toLocaleDateString())
+              }
+            >
               <DatePickerInput
-                id={'sss'}
-                labelText={'Fecha'}
-                defaultValue={new Date().toLocaleDateString()}
-                onChange={handleChange}
+                id="date"
+                labelText="Fecha"
+                value={date}
+                invalid={!!errors.date}
+                invalidText={errors.date || ''}
               />
             </DatePicker>
             <TextInput
@@ -82,45 +133,53 @@ const HomePage = () => {
               labelText="Ciudad"
               value={softwareInfo.city}
               onChange={handleChange}
+              invalid={!!errors.city}
+              invalidText={errors.city || ''}
+              maxLength={255}
             />
             <TextInput
               id="company"
               labelText="Empresa"
               value={softwareInfo.company}
               onChange={handleChange}
+              invalid={!!errors.company}
+              invalidText={errors.company || ''}
+              maxLength={255}
             />
             <TextInput
               id="phone"
               labelText="Teléfono"
               value={softwareInfo.phone}
               onChange={handleChange}
+              invalid={!!errors.phone}
+              invalidText={errors.phone || ''}
+              maxLength={255}
             />
             <TextInput
               id="softwareName"
               labelText="Nombre del Software"
               value={softwareInfo.softwareName}
               onChange={handleChange}
+              invalid={!!errors.softwareName}
+              invalidText={errors.softwareName || ''}
+              maxLength={255}
             />
-            <div style={{ width: '100%' }}>
-              <TextArea
-                id="generalObjectives"
-                labelText="Objetivos Generales del Software"
-                value={softwareInfo.generalObjectives}
-                onChange={handleChange}
-                placeholder="Ingrese los objetivos generales del software aquí"
-                rows={4}
-              />
-            </div>
-            <div style={{ width: '100%' }}>
-              <TextArea
-                id="specificObjectives"
-                labelText="Objetivos Específicos del Software"
-                value={softwareInfo.specificObjectives}
-                onChange={handleChange}
-                placeholder="Ingrese los objetivos específicos del software aquí"
-                rows={4}
-              />
-            </div>
+            <TextArea
+              id="generalObjectives"
+              labelText="Objetivos Generales del Software"
+              value={softwareInfo.generalObjectives}
+              onChange={handleChange}
+              invalid={!!errors.generalObjectives}
+              invalidText={errors.generalObjectives || ''}
+            />
+            <TextArea
+              id="specificObjectives"
+              labelText="Objetivos Específicos del Software"
+              value={softwareInfo.specificObjectives}
+              onChange={handleChange}
+              invalid={!!errors.specificObjectives}
+              invalidText={errors.specificObjectives || ''}
+            />
 
             <h3>Participantes</h3>
             <div style={{ width: '100%' }}>

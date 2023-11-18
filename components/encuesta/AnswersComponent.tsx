@@ -2,24 +2,30 @@
 
 import React, { useState } from 'react';
 import { RadioButton, RadioButtonGroup, TextArea, Button } from '@carbon/react';
-import { useSoftware } from '@/contexts'; // Importa correctamente tu contexto
+import { useSoftware } from '@/contexts';
+import ResultTable from '@/components/resultTable/resultTable'; // Importa correctamente tu contexto
 
 export const AnswersComponent = () => {
   const { answers, updateAnswer } = useSoftware();
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [currentItemIndex, setCurrentItemIndex] = useState(0);
-  const [currentValue, setCurrentValue] = useState('');
+  const [currentValue, setCurrentValue] = useState(0);
   const [currentObservation, setCurrentObservation] = useState('');
 
   const currentSection = answers.sections[currentSectionIndex];
   const currentItem = currentSection?.items[currentItemIndex];
 
   const handleNext = () => {
+    // Con el objetivo de hacer pruebasGenera un número aleatorio entre 0:03 para el valor actual
+    const randomValue = Math.random() * (3 - 0) + 0;
+    console.log(randomValue);
+    setCurrentValue(randomValue);
+
     // Actualiza la respuesta en el contexto
     updateAnswer(
       currentSection.id,
       currentItem.id,
-      parseInt(currentValue, 10),
+      parseInt(currentValue),
       currentObservation,
     );
 
@@ -34,12 +40,12 @@ export const AnswersComponent = () => {
     }
 
     // Limpia los valores actuales para la siguiente pregunta
-    setCurrentValue('');
+    setCurrentValue(0);
     setCurrentObservation('');
   };
 
   if (currentItem.id === -1) {
-    return <div>No hay más preguntas en la encuesta.</div>;
+    return <ResultTable />;
   }
 
   //
@@ -52,10 +58,14 @@ export const AnswersComponent = () => {
       <RadioButtonGroup
         name={`group-${currentItem.id}`}
         valueSelected={currentValue}
-        onChange={(value) => setCurrentValue(value as string)}
+        onChange={(value) => setCurrentValue(2)}
         defaultSelected={'res-0'}
       >
-        <RadioButton labelText="0 No cumple de 0% a un 30%" value="0" />
+        <RadioButton
+          labelText="0 No cumple de 0% a un 30%"
+          value="0"
+          id={'res-0'}
+        />
         <RadioButton labelText="1 Cumple de 31% a 50%" value="1" />
         <RadioButton labelText="2 Cumple de 51% a 89%" value="2" />
         <RadioButton labelText="3 Cumple con o más del 90%" value="3" />
@@ -66,7 +76,12 @@ export const AnswersComponent = () => {
         value={currentObservation}
         onChange={(e) => setCurrentObservation(e.target.value)}
       />
-      <Button onClick={handleNext}>Siguiente</Button>
+      <Button
+        onClick={handleNext}
+        style={{ position: 'fixed', bottom: '0', right: '0' }}
+      >
+        Siguiente
+      </Button>
     </div>
   );
 };

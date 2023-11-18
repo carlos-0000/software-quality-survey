@@ -12,7 +12,7 @@ import {
   Row,
   SkipToContent,
 } from '@carbon/react';
-import { Asleep, Light } from '@carbon/icons-react';
+import { Asleep, Light, Switcher } from '@carbon/icons-react'; // Importa el icono que desees utilizar
 import { useTheme } from '@/contexts';
 
 interface UIShellProps {
@@ -49,6 +49,13 @@ export const UIShell: React.FC<UIShellProps> = ({ content }) => {
         </HeaderName>
         <HeaderGlobalBar>
           <HeaderGlobalAction
+            aria-label="Ver todos los software evaluados"
+            tooltipAlignment="end"
+            onClick={() => push('/historial')}
+          >
+            <Switcher size={20} /> {/* Icono que representa la acción */}
+          </HeaderGlobalAction>
+          <HeaderGlobalAction
             aria-label="Toggle theme"
             tooltipAlignment="end"
             onClick={() => toggleTheme(isLight ? 'g100' : 'white')}
@@ -57,17 +64,7 @@ export const UIShell: React.FC<UIShellProps> = ({ content }) => {
           </HeaderGlobalAction>
         </HeaderGlobalBar>
       </Header>
-      <Content
-        id="main-content"
-        style={{
-          height: '100%',
-        }}
-      >
-        {/*<Grid>*/}
-        {/*  <Row>*/}
-        {/*    <Column>{content}</Column>*/}
-        {/*  </Row>*/}
-        {/*</Grid>*/}
+      <Content id="main-content" style={{ height: '100%' }}>
         {content}
       </Content>
     </>

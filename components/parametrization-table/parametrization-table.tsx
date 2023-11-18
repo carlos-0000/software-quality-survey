@@ -84,7 +84,18 @@ const ParametrizationTable = () => {
                 </TableRow>
               ))}
               <TableRow>
-                <TableCell colSpan={4}>Total</TableCell>
+                <TableCell colSpan={4}>
+                  {parametrization.reduce(
+                    (acc, param) => acc + param.totalPercentage,
+                    0,
+                  ) !== 100 ? (
+                    <span style={{ color: 'red' }}>
+                      El porcentaje Total debe ser igual a 100%
+                    </span>
+                  ) : (
+                    'Total'
+                  )}
+                </TableCell>
                 <TableCell style={{ color: totalError ? 'red' : 'inherit' }}>
                   {parametrization
                     .reduce((acc, param) => acc + param.totalPercentage, 0)
