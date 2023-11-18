@@ -24,3 +24,17 @@ body {
 .cds--accordion__content {
   padding: 0 !important;
 }
+
+
+.cds--date-picker {
+  width: 100%;
+  &__input {
+    inline-size: 100% !important;
+  }
+  &-container {
+    width: 100%;
+  }
+  &-input__wrapper > span {
+    width: 100%;
+  }
+}

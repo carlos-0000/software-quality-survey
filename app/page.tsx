@@ -114,72 +114,85 @@ const HomePage = () => {
           </header>
 
           <Form onSubmit={handleSubmit}>
-            <DatePicker
-              datePickerType="single"
-              onChange={(eventOrDate) =>
-                handleDateChange(eventOrDate[0].toLocaleDateString())
-              }
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gridGap: '1rem',
+              }}
             >
-              <DatePickerInput
-                id="date"
-                labelText="Fecha"
-                value={date}
-                invalid={!!errors.date}
-                invalidText={errors.date || ''}
+              <DatePicker
+                datePickerType="single"
+                onChange={(eventOrDate) =>
+                  handleDateChange(eventOrDate[0].toLocaleDateString())
+                }
+                style={{ width: '100%' }}
+              >
+                <DatePickerInput
+                  id="date"
+                  labelText="Fecha"
+                  value={date}
+                  invalid={!!errors.date}
+                  invalidText={errors.date || ''}
+                />
+              </DatePicker>
+              <TextInput
+                id="city"
+                labelText="Ciudad"
+                value={softwareInfo.city}
+                onChange={handleChange}
+                invalid={!!errors.city}
+                invalidText={errors.city || ''}
+                maxLength={255}
               />
-            </DatePicker>
-            <TextInput
-              id="city"
-              labelText="Ciudad"
-              value={softwareInfo.city}
-              onChange={handleChange}
-              invalid={!!errors.city}
-              invalidText={errors.city || ''}
-              maxLength={255}
-            />
-            <TextInput
-              id="company"
-              labelText="Empresa"
-              value={softwareInfo.company}
-              onChange={handleChange}
-              invalid={!!errors.company}
-              invalidText={errors.company || ''}
-              maxLength={255}
-            />
-            <TextInput
-              id="phone"
-              labelText="Teléfono"
-              value={softwareInfo.phone}
-              onChange={handleChange}
-              invalid={!!errors.phone}
-              invalidText={errors.phone || ''}
-              maxLength={255}
-            />
-            <TextInput
-              id="softwareName"
-              labelText="Nombre del Software"
-              value={softwareInfo.softwareName}
-              onChange={handleChange}
-              invalid={!!errors.softwareName}
-              invalidText={errors.softwareName || ''}
-              maxLength={255}
-            />
-            <TextArea
-              id="generalObjectives"
-              labelText="Objetivos Generales del Software"
-              value={softwareInfo.generalObjectives}
-              onChange={handleChange}
-              invalid={!!errors.generalObjectives}
-              invalidText={errors.generalObjectives || ''}
-            />
-            <TextArea
-              id="specificObjectives"
-              labelText="Objetivos Específicos del Software"
-              value={softwareInfo.specificObjectives}
-              onChange={handleChange}
-              invalid={!!errors.specificObjectives}
-              invalidText={errors.specificObjectives || ''}
-            />
+              <TextInput
+                id="company"
+                labelText="Empresa"
+                value={softwareInfo.company}
+                onChange={handleChange}
+                invalid={!!errors.company}
+                invalidText={errors.company || ''}
+                maxLength={255}
+              />
+              <TextInput
+                id="phone"
+                labelText="Teléfono"
+                value={softwareInfo.phone}
+                onChange={handleChange}
+                invalid={!!errors.phone}
+                invalidText={errors.phone || ''}
+                maxLength={255}
+              />
+              <TextInput
+                id="softwareName"
+                labelText="Nombre del Software"
+                value={softwareInfo.softwareName}
+                onChange={handleChange}
+                invalid={!!errors.softwareName}
+                invalidText={errors.softwareName || ''}
+                maxLength={255}
+              />
+              <div style={{ gridColumn: '1 / 3' }}>
+                <TextArea
+                  id="generalObjectives"
+                  labelText="Objetivos Generales del Software"
+                  value={softwareInfo.generalObjectives}
+                  onChange={handleChange}
+                  invalid={!!errors.generalObjectives}
+                  invalidText={errors.generalObjectives || ''}
+                />
+              </div>
+              <div style={{ gridColumn: '1 / 3' }}>
+                <TextArea
+                  id="specificObjectives"
+                  labelText="Objetivos Específicos del Software"
+                  value={softwareInfo.specificObjectives}
+                  onChange={handleChange}
+                  invalid={!!errors.specificObjectives}
+                  invalidText={errors.specificObjectives || ''}
+                />
+              </div>
+            </div>
 
             <h3>Participantes</h3>
             <div style={{ width: '100%' }}>
