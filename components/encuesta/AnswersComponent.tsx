@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // @ts-ignore
 import { Button, Layer, Slider, Stack, TextArea, Tile } from '@carbon/react';
 import { useSoftware } from '@/contexts';
@@ -13,7 +13,8 @@ const fadeOutRightClassNames = 'animate__animated animate__fadeOutRight';
 const animationDuration = Number(durationSlow01.slice(0, -2)); // 700ms like
 
 export const AnswersComponent = () => {
-  const { answers, updateAnswer } = useSoftware();
+  const { answers, updateAnswer, sliderValue, updateSliderValue } =
+    useSoftware();
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [currentItemIndex, setCurrentItemIndex] = useState(0);
   const [currentValue, setCurrentValue] = useState(0);
@@ -24,8 +25,6 @@ export const AnswersComponent = () => {
 
   const currentSection = answers.sections[currentSectionIndex];
   const currentItem = currentSection?.items[currentItemIndex];
-
-  const [sliderValue, setSliderValue] = useState(50);
 
   const changeItemSection = (prev = false) => {
     // Actualiza la respuesta en el contexto
@@ -145,6 +144,7 @@ export const AnswersComponent = () => {
                         hideTextInput={true}
                         formatLabel={(value: string) => `${value}%`}
                         onChange={({ value }: { value: number }) => {
+                          console.log(value);
                           const result =
                             value <= 30
                               ? 0
@@ -153,7 +153,7 @@ export const AnswersComponent = () => {
                               : value <= 89
                               ? 2
                               : 3;
-                          setSliderValue(value);
+                          updateSliderValue(value);
                           setCurrentValue(result);
                         }}
                       />

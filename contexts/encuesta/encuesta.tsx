@@ -4,10 +4,12 @@ import React, {
   useState,
   useMemo,
   useCallback,
+  useEffect,
 } from 'react';
 
 // Tipos de datos proporcionados
 type ContextType = {
+  sliderValue: number;
   softwareInfo: {
     date: string;
     city: string;
@@ -43,6 +45,8 @@ type ContextType = {
       }[];
     }[];
   };
+
+  updateSliderValue: (value: number) => void;
   updateSoftwareInfo: (info: typeof defaultContext.softwareInfo) => void;
   updateParticipants: (parts: typeof defaultContext.participants) => void;
   updateParametrization: (param: typeof defaultContext.parametrization) => void;
@@ -58,6 +62,7 @@ type ContextType = {
 
 // Estado inicial por defecto
 const defaultContext: ContextType = {
+  sliderValue: 50,
   softwareInfo: {
     date: '',
     city: '',
@@ -450,6 +455,7 @@ const defaultContext: ContextType = {
       },
     ],
   },
+  updateSliderValue: () => {},
   updateSoftwareInfo: () => {},
   updateParticipants: () => {},
   updateParametrization: () => {},
@@ -467,12 +473,17 @@ export const SoftwareProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+  const [sliderValue, setSliderValue] = useState(defaultContext.sliderValue);
   const [softwareInfo, setSoftwareInfo] = useState(defaultContext.softwareInfo);
   const [participants, setParticipants] = useState(defaultContext.participants);
   const [parametrization, setParametrization] = useState(
     defaultContext.parametrization,
   );
   const [answers, setAnswers] = useState(defaultContext.answers);
+
+  const updateSliderValue = useCallback((value: number) => {
+    setSliderValue(value);
+  }, []);
 
   // Funciones para actualizar el estado
   const updateSoftwareInfo = useCallback(
@@ -537,6 +548,8 @@ export const SoftwareProvider = ({
   // Memorización de valores del contexto
   const contextValues = useMemo(
     () => ({
+      sliderValue,
+      updateSliderValue,
       softwareInfo,
       updateSoftwareInfo,
       participants,
@@ -548,7 +561,7 @@ export const SoftwareProvider = ({
       updateAnswers,
       updateAnswer,
     }),
-    [softwareInfo, participants, parametrization, answers],
+    [softwareInfo, participants, parametrization, answers, sliderValue],
   );
 
   return (
