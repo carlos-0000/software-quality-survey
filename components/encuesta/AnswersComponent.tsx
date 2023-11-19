@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import {
-  TextArea,
-  Button,
-  // @ts-ignore
-  Stack,
-  // @ts-ignore
-  Slider,
-  Tile,
-  // @ts-ignore
-  Layer,
-} from '@carbon/react';
+// @ts-ignore
+import { Button, Layer, Slider, Stack, TextArea, Tile } from '@carbon/react';
 import { useSoftware } from '@/contexts';
 import ResultTable from '@/components/resultTable/resultTable';
+// @ts-ignore
+import { durationSlow01 } from '@carbon/motion';
+
+const fadeInRightClassNames = 'animate__animated animate__fadeInRight';
+const fadeInLeftClassNames = 'animate__animated animate__fadeInLeft';
+const fadeOutLeftClassNames = 'animate__animated animate__fadeOutLeft';
+const fadeOutRightClassNames = 'animate__animated animate__fadeOutRight';
+const animationDuration = Number(durationSlow01.slice(0, -2)); // 700ms like
 
 export const AnswersComponent = () => {
   const { answers, updateAnswer } = useSoftware();
@@ -20,17 +19,15 @@ export const AnswersComponent = () => {
   const [currentValue, setCurrentValue] = useState(0);
   const [currentObservation, setCurrentObservation] = useState('');
 
+  const [sectionClassNames, setSectionClassNames] = useState('');
+  const [itemClassNames, setItemClassNames] = useState('');
+
   const currentSection = answers.sections[currentSectionIndex];
   const currentItem = currentSection?.items[currentItemIndex];
 
   const [sliderValue, setSliderValue] = useState(50);
 
-  const handleNext = () => {
-    // Con el objetivo de hacer pruebasGenera un número aleatorio entre 0:03 para el valor actual
-    const randomValue = Math.random() * (3 - 0) + 0;
-    console.log(randomValue);
-    setCurrentValue(randomValue);
-
+  const changeItemSection = (prev = false) => {
     // Actualiza la respuesta en el contexto
     updateAnswer(
       currentSection.id,
@@ -39,14 +36,55 @@ export const AnswersComponent = () => {
       currentObservation,
     );
 
-    // Avanza a la siguiente pregunta o sección
-    if (currentItemIndex < currentSection.items.length - 1) {
-      setCurrentItemIndex(currentItemIndex + 1);
-    } else if (currentSectionIndex < answers.sections.length - 1) {
-      setCurrentSectionIndex(currentSectionIndex + 1);
-      setCurrentItemIndex(0); // Reinicia el índice del ítem para la nueva sección
+    if (prev) {
+      const nextItemIndex = currentItemIndex - 1;
+      const hasToChangeSection = nextItemIndex < 0;
+
+      if (hasToChangeSection) {
+        const nextSectionIndex = currentSectionIndex - 1;
+
+        setSectionClassNames(fadeInRightClassNames);
+        setTimeout(() => {
+          setCurrentSectionIndex(nextSectionIndex);
+          setSectionClassNames(fadeInLeftClassNames);
+        }, animationDuration);
+
+        setItemClassNames(fadeOutRightClassNames);
+        setTimeout(() => {
+          setCurrentItemIndex(
+            answers.sections[nextSectionIndex].items.length - 1,
+          );
+          setItemClassNames(fadeInLeftClassNames);
+        }, animationDuration);
+      } else {
+        setItemClassNames(fadeOutRightClassNames);
+        setTimeout(() => {
+          setCurrentItemIndex(nextItemIndex);
+          setItemClassNames(fadeInLeftClassNames);
+        }, animationDuration);
+      }
     } else {
-      currentItem.id = -1; // No hay más preguntas
+      const hasToChangeSection =
+        currentItemIndex + 1 >= currentSection.items.length;
+      const nextItemIndex = currentItemIndex + 1;
+      if (hasToChangeSection) {
+        setSectionClassNames(fadeOutLeftClassNames);
+        setTimeout(() => {
+          setCurrentSectionIndex(currentSectionIndex + 1);
+          setSectionClassNames(fadeInRightClassNames);
+        }, animationDuration);
+        setItemClassNames(fadeOutLeftClassNames);
+        setTimeout(() => {
+          setCurrentItemIndex(0);
+          setItemClassNames(fadeInRightClassNames);
+        }, animationDuration);
+      } else {
+        setItemClassNames(fadeOutLeftClassNames);
+        setTimeout(() => {
+          setCurrentItemIndex(nextItemIndex);
+          setItemClassNames(fadeInRightClassNames);
+        }, animationDuration);
+      }
     }
 
     // Limpia los valores actuales para la siguiente pregunta
@@ -67,8 +105,8 @@ export const AnswersComponent = () => {
         gap: '1rem',
       }}
     >
-      <div>
-        <Tile style={{ padding: 0 }}>
+      <div style={{ overflow: 'hidden' }}>
+        <Tile style={{ padding: 0 }} className={sectionClassNames}>
           <Layer>
             <div style={{ padding: '1rem' }}>
               <Stack gap={3}>
@@ -81,7 +119,7 @@ export const AnswersComponent = () => {
                 <p>{currentSection.description}</p>
               </Stack>
             </div>
-            <Tile>
+            <Tile className={itemClassNames}>
               <Layer>
                 <Stack gap={3}>
                   <small>
@@ -120,7 +158,20 @@ export const AnswersComponent = () => {
                         }}
                       />
                     </div>
-                    <h1>{sliderValue}%</h1>
+                    <h1
+                      style={{
+                        color:
+                          sliderValue <= 30
+                            ? 'var(--cds-support-error)'
+                            : sliderValue <= 50
+                            ? 'var(--cds-support-caution-major)'
+                            : sliderValue <= 89
+                            ? 'var(--cds-support-caution-minor)'
+                            : 'var(--cds-support-success)',
+                      }}
+                    >
+                      {sliderValue}%
+                    </h1>
                   </div>
                   <TextArea
                     id={`observation-${currentItem.id}`}
@@ -135,10 +186,14 @@ export const AnswersComponent = () => {
         </Tile>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Button kind={'secondary'} onClick={handleNext}>
+        <Button
+          kind={'secondary'}
+          onClick={() => changeItemSection(true)}
+          disabled={currentSectionIndex === 0 && currentItemIndex === 0}
+        >
           Anterior
         </Button>
-        <Button onClick={handleNext}>Siguiente</Button>
+        <Button onClick={() => changeItemSection()}>Siguiente</Button>
       </div>
     </div>
   );

@@ -1,7 +1,9 @@
 @use '@carbon/react' as styles;
+@use '@carbon/motion';
 
 :root {
   @include styles.theme(styles.$white);
+  --animate-duration: #{motion.$duration-slow-01};
 }
 
 [data-carbon-theme='g10'] {

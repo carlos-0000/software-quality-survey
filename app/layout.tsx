@@ -1,6 +1,6 @@
 'use client';
-import './globals.scss';
 import 'animate.css';
+import './globals.scss';
 import { UIShell } from '@/components';
 import { ThemeProvider, SoftwareProvider } from '@/contexts';
 

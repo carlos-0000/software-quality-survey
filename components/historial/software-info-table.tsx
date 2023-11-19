@@ -38,7 +38,7 @@ const SoftwareInfoTable = () => {
     fetchData();
   }, []);
 
-  const handleDownloadReport = async (softwareInfoId) => {
+  const handleDownloadReport = async (softwareInfoId: number) => {
     try {
       const response = await fetch(`/api/generate-report?id=${softwareInfoId}`);
       if (!response.ok) {
@@ -69,22 +69,22 @@ const SoftwareInfoTable = () => {
     { key: 'actions', header: 'Acciones' },
   ];
 
-  const rows = softwareInfoData.map((info) => ({
-    ...info,
-    actions: (
-      <Button
-        kind="secondary"
-        onClick={() => handleDownloadReport(info.id)}
-        renderIcon={TableBuilt}
-      >
-        Descargar Reporte
-      </Button>
-    ),
-  }));
+  const rows = softwareInfoData.map(
+    (info: { [key: string]: number | string }) => ({
+      ...info,
+      actions: (
+        <Button
+          kind="secondary"
+          onClick={() => handleDownloadReport(info.id as number)}
+          renderIcon={TableBuilt}
+        >
+          Descargar Reporte
+        </Button>
+      ),
+    }),
+  );
   return (
-    // <Grid>
-    //   <Row>
-    //     <Column>
+    // @ts-ignore
     <DataTable rows={rows} headers={headers} isSortable>
       {({ rows, headers, getHeaderProps, getRowProps, getTableProps }) => (
         <TableContainer title="Información del Software">
@@ -97,16 +97,18 @@ const SoftwareInfoTable = () => {
           <Table {...getTableProps()}>
             <TableHead>
               <TableRow>
-                {headers.map((header) => (
-                  <TableHeader {...getHeaderProps({ header })}>
+                {headers.map((header, index) => (
+                  // @ts-ignore Carbon xd
+                  <TableHeader {...getHeaderProps({ header })} key={index}>
                     {header.header}
                   </TableHeader>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
-                <TableRow {...getRowProps({ row })}>
+              {rows.map((row, key) => (
+                // @ts-ignore Carbon xd
+                <TableRow {...getRowProps({ row })} key={key}>
                   {row.cells.map((cell) => (
                     <TableCell key={cell.id}>{cell.value}</TableCell>
                   ))}
@@ -117,9 +119,6 @@ const SoftwareInfoTable = () => {
         </TableContainer>
       )}
     </DataTable>
-    //     </Column>
-    //   </Row>
-    // </Grid>
   );
 };
 
