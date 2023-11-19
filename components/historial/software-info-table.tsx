@@ -27,8 +27,8 @@ const SoftwareInfoTable = () => {
           console.log('Error:', response);
           throw new Error('Error al obtener los datos');
         }
-        const { rows } = await response.json();
-
+        const rows = await response.json();
+        console.log('rows', rows);
         setSoftwareInfoData(rows);
       } catch (error) {
         console.error('Error:', error);

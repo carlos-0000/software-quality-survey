@@ -1,0 +1,260 @@
+[
+  {
+    "section_saludable": {
+      "id": 1,
+      "title": "Saludable",
+      "description": "Esta sección evalúa tus hábitos alimenticios desde la perspectiva de la salud.",
+      "items": [
+        {
+          "id": 101,
+          "title_item": "Consumo de Frutas y Verduras",
+          "description_item": "Incluir frutas y verduras en tu dieta aporta nutrientes esenciales.",
+          "options": [
+            {
+              "label": "En todas las comidas",
+              "value": 4
+            },
+            {
+              "label": "Una vez al día",
+              "value": 3
+            },
+            {
+              "label": "Pocas veces a la semana",
+              "value": 2
+            },
+            {
+              "label": "Rara vez o nunca",
+              "value": 1
+            }
+          ],
+          "respuesta": 1
+        },
+        {
+          "id": 102,
+          "title_item": "Hidratación",
+          "description_item": "Mantenerse hidratado es crucial para la salud. El agua es la mejor opción.",
+          "options": [
+            {
+              "label": "Principalmente agua",
+              "value": 4
+            },
+            {
+              "label": "Bebidas naturales/jugos",
+              "value": 3
+            },
+            {
+              "label": "Bebidas azucaradas",
+              "value": 2
+            },
+            {
+              "label": "Bebidas alcohólicas",
+              "value": 1
+            }
+          ],
+          "respuesta": 1
+        },
+        {
+          "id": 103,
+          "title_item": "Consumo de Alimentos Procesados",
+          "description_item": "Los alimentos procesados suelen contener altos niveles de azúcar, grasa y sal.",
+          "options": [
+            {
+              "label": "Nunca",
+              "value": 4
+            },
+            {
+              "label": "Raramente",
+              "value": 3
+            },
+            {
+              "label": "Ocasionalmente",
+              "value": 2
+            },
+            {
+              "label": "Frecuentemente",
+              "value": 1
+            }
+          ],
+          "respuesta": 1
+        },
+        {
+          "id": 104,
+          "title_item": "Consumo de Grasas Saludables",
+          "description_item": "Las grasas saludables son importantes para el corazón y la salud en general.",
+          "options": [
+            {
+              "label": "Frecuentemente (p.ej., aguacate, frutos secos)",
+              "value": 4
+            },
+            {
+              "label": "Ocasionalmente",
+              "value": 3
+            },
+            {
+              "label": "Raramente",
+              "value": 2
+            },
+            {
+              "label": "Nunca o grasas no saludables",
+              "value": 1
+            }
+          ],
+          "respuesta": 1
+        },
+        {
+          "id": 105,
+          "title_item": "Consumo de Azúcar Añadido",
+          "description_item": "El exceso de azúcar añadido puede llevar a problemas de salud.",
+          "options": [
+            {
+              "label": "Nunca o muy raramente",
+              "value": 4
+            },
+            {
+              "label": "Ocasionalmente",
+              "value": 3
+            },
+            {
+              "label": "Regularmente",
+              "value": 2
+            },
+            {
+              "label": "Muy frecuentemente",
+              "value": 1
+            }
+          ],
+          "respuesta": 1
+        }
+      ]
+    }
+  },
+  {
+    "section_sostenible": {
+      "id": 2,
+      "title": "Sostenible",
+      "description": "Esta sección evalúa el impacto ambiental de tus elecciones alimenticias.",
+      "items": [
+        {
+          "id": 201,
+          "title_item": "Compra en Mercados Locales vs. Grandes Supermercados",
+          "description_item": "Los productos de mercados locales suelen tener un menor impacto ambiental.",
+          "options": [
+            {
+              "label": "Mayormente en mercados locales",
+              "value": 4
+            },
+            {
+              "label": "Una mezcla de ambos",
+              "value": 3
+            },
+            {
+              "label": "Mayormente en grandes supermercados",
+              "value": 2
+            },
+            {
+              "label": "Exclusivamente en grandes supermercados",
+              "value": 1
+            }
+          ],
+          "respuesta": 1
+        },
+        {
+          "id": 202,
+          "title_item": "Uso de Productos Orgánicos",
+          "description_item": "Los productos orgánicos evitan el uso de pesticidas y herbicidas nocivos.",
+          "options": [
+            {
+              "label": "Siempre",
+              "value": 4
+            },
+            {
+              "label": "A menudo",
+              "value": 3
+            },
+            {
+              "label": "Raramente",
+              "value": 2
+            },
+            {
+              "label": "Nunca",
+              "value": 1
+            }
+          ],
+          "respuesta": 1
+        },
+        {
+          "id": 203,
+          "title_item": "Reducción de Desperdicio de Alimentos",
+          "description_item": "Minimizar el desperdicio de alimentos contribuye a la sostenibilidad.",
+          "options": [
+            {
+              "label": "Siempre evito desperdiciar",
+              "value": 4
+            },
+            {
+              "label": "A menudo",
+              "value": 3
+            },
+            {
+              "label": "A veces",
+              "value": 2
+            },
+            {
+              "label": "Nunca pienso en ello",
+              "value": 1
+            }
+          ],
+          "respuesta": 1
+        },
+        {
+          "id": 204,
+          "title_item": "Uso de Bolsas Reutilizables",
+          "description_item": "El uso de bolsas reutilizables reduce la dependencia de plásticos desechables.",
+          "options": [
+            {
+              "label": "Siempre uso bolsas reutilizables",
+              "value": 4
+            },
+            {
+              "label": "A menudo",
+              "value": 3
+            },
+            {
+              "label": "A veces",
+              "value": 2
+            },
+            {
+              "label": "Nunca uso bolsas reutilizables",
+              "value": 1
+            }
+          ],
+          "respuesta": 1
+        },
+        {
+          "id": 205,
+          "title_item": "Preferencia por Productos de Temporada",
+          "description_item": "Elegir productos de temporada apoya la producción local y reduce el transporte.",
+          "options": [
+            {
+              "label": "Siempre elijo productos de temporada",
+              "value": 4
+            },
+            {
+              "label": "A menudo",
+              "value": 3
+            },
+            {
+              "label": "A veces",
+              "value": 2
+            },
+            {
+              "label": "Nunca presto atención a esto",
+              "value": 1
+            }
+          ],
+          "respuesta": 1
+        }
+      ]
+    }
+  }
+]
