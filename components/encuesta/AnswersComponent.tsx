@@ -12,11 +12,28 @@ const fadeOutLeftClassNames = 'animate__animated animate__fadeOutLeft';
 const fadeOutRightClassNames = 'animate__animated animate__fadeOutRight';
 const animationDuration = Number(durationSlow01.slice(0, -2)); // 700ms like
 
+const getPercentageColor = (value: number) => {
+  return value <= 30
+    ? 'var(--cds-support-error)'
+    : value <= 50
+    ? 'var(--cds-support-caution-major)'
+    : value <= 89
+    ? 'var(--cds-support-caution-minor)'
+    : 'var(--cds-support-success)';
+};
+
+const categories = {
+  '0': 'No cumple',
+  '1': 'Cumple parcialmente',
+  '2': 'Cumple',
+  '3': 'Cumple totalmente',
+};
+
 export const AnswersComponent = () => {
   const { answers, updateAnswer, sliderValue, updateSliderValue } =
     useSoftware();
-  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
-  const [currentItemIndex, setCurrentItemIndex] = useState(0);
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(6);
+  const [currentItemIndex, setCurrentItemIndex] = useState(5);
   const [currentValue, setCurrentValue] = useState(0);
   const [currentObservation, setCurrentObservation] = useState('');
 
@@ -91,7 +108,7 @@ export const AnswersComponent = () => {
     setCurrentObservation('');
   };
 
-  if (currentItem.id === -1) {
+  if (!currentItem) {
     return <ResultTable />;
   }
 
@@ -129,49 +146,46 @@ export const AnswersComponent = () => {
                   <div
                     style={{
                       display: 'flex',
-                      alignItems: 'flex-end',
-                      gap: '1rem',
-                      paddingBlock: '1rem',
+                      flexDirection: 'column',
+                      paddingBlock: '.75rem',
+                      gap: '.5rem',
                     }}
                   >
-                    <div>
-                      <Slider
-                        labelText="Nivel de cumplimiento"
-                        max={100}
-                        min={0}
-                        step={1}
-                        value={sliderValue}
-                        hideTextInput={true}
-                        formatLabel={(value: string) => `${value}%`}
-                        onChange={({ value }: { value: number }) => {
-                          console.log(value);
-                          const result =
-                            value <= 30
-                              ? 0
-                              : value <= 50
-                              ? 1
-                              : value <= 89
-                              ? 2
-                              : 3;
-                          updateSliderValue(value);
-                          setCurrentValue(result);
-                        }}
-                      />
-                    </div>
-                    <h1
+                    <Slider
+                      labelText="Nivel de cumplimiento"
+                      max={100}
+                      min={0}
+                      step={1}
+                      value={sliderValue}
+                      hideTextInput={true}
+                      formatLabel={(value: string) => `${value}%`}
+                      onChange={({ value }: { value: number }) => {
+                        const result =
+                          value <= 30
+                            ? 0
+                            : value <= 50
+                            ? 1
+                            : value <= 89
+                            ? 2
+                            : 3;
+                        updateSliderValue(value);
+                        setCurrentValue(result);
+                      }}
+                    />
+                    <span
                       style={{
-                        color:
-                          sliderValue <= 30
-                            ? 'var(--cds-support-error)'
-                            : sliderValue <= 50
-                            ? 'var(--cds-support-caution-major)'
-                            : sliderValue <= 89
-                            ? 'var(--cds-support-caution-minor)'
-                            : 'var(--cds-support-success)',
+                        color: getPercentageColor(sliderValue),
+                        fontSize: '1.25rem',
+                        fontWeight: 'bold',
                       }}
                     >
-                      {sliderValue}%
-                    </h1>
+                      {sliderValue}% -{' '}
+                      {
+                        categories[
+                          String(currentValue) as keyof typeof categories
+                        ]
+                      }
+                    </span>
                   </div>
                   <TextArea
                     id={`observation-${currentItem.id}`}
