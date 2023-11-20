@@ -103,6 +103,7 @@ const SoftwareInfoTable = () => {
         <AsyncButton
           action={() => handleDownloadReport(info.id as number)}
           renderIcon={TableBuilt}
+          style={{ margin: '0.3rem 0 0 0' }}
         >
           Descargar Reporte
         </AsyncButton>
@@ -134,67 +135,66 @@ const SoftwareInfoTable = () => {
               </div>
             </Stack>
           </header>
-          <AccordionTile title={'Historial de Evaluaciones'} isOpenProp={true}>
-            <DataTable rows={rows} headers={headers} isSortable>
-              {({
-                rows,
-                headers,
-                getHeaderProps,
-                getRowProps,
-                getTableProps,
-              }) => (
-                <TableContainer>
-                  <TableToolbar>
-                    {/* Agrega contenido adicional al toolbar si es necesario */}
-                    <TableToolbarContent>
-                      {/* Puedes agregar botones u otros elementos aquí */}
-                    </TableToolbarContent>
-                  </TableToolbar>
-                  <Table {...getTableProps()}>
-                    <TableHead>
-                      <TableRow>
-                        {headers.map((header, index) => (
-                          // @ts-ignore Carbon xd
-                          <TableHeader
-                            {...getHeaderProps({ header })}
-                            key={index}
-                          >
-                            {header.header}
-                          </TableHeader>
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {rows.map((row, key) => (
-                        // @ts-ignore Carbon xd
-                        <TableRow {...getRowProps({ row })} key={key}>
-                          {row.cells.map((cell) => (
-                            <TableCell key={cell.id}>
-                              {cell.info.header === 'total_percent_global' ? (
-                                <Tag
-                                  className={getTagClassName(
-                                    Number(cell.value),
-                                  )}
-                                  style={{
-                                    flexShrink: 0,
-                                    width: '4.6rem',
-                                  }}
-                                >
-                                  {`${cell.value}%`}
-                                </Tag>
-                              ) : (
-                                cell.value
-                              )}
-                            </TableCell>
+          <div style={{ marginBottom: '2rem' }}>
+            <AccordionTile
+              title={'Historial de Evaluaciones'}
+              isOpenProp={true}
+            >
+              <DataTable rows={rows} headers={headers} isSortable>
+                {({
+                  rows,
+                  headers,
+                  getHeaderProps,
+                  getRowProps,
+                  getTableProps,
+                }) => (
+                  <TableContainer>
+                    <Table {...getTableProps()}>
+                      <TableHead>
+                        <TableRow>
+                          {headers.map((header, index) => (
+                            // @ts-ignore Carbon xd
+                            <TableHeader
+                              {...getHeaderProps({ header })}
+                              key={index}
+                            >
+                              {header.header}
+                            </TableHeader>
                           ))}
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              )}
-            </DataTable>
-          </AccordionTile>
+                      </TableHead>
+                      <TableBody>
+                        {rows.map((row, key) => (
+                          // @ts-ignore Carbon xd
+                          <TableRow {...getRowProps({ row })} key={key}>
+                            {row.cells.map((cell) => (
+                              <TableCell key={cell.id}>
+                                {cell.info.header === 'total_percent_global' ? (
+                                  <Tag
+                                    className={getTagClassName(
+                                      Number(cell.value),
+                                    )}
+                                    style={{
+                                      flexShrink: 0,
+                                      width: '4.6rem',
+                                    }}
+                                  >
+                                    {`${cell.value}%`}
+                                  </Tag>
+                                ) : (
+                                  cell.value
+                                )}
+                              </TableCell>
+                            ))}
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                )}
+              </DataTable>
+            </AccordionTile>
+          </div>
         </Stack>
       </Column>
     </Grid>
