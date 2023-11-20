@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 // @ts-ignore
 import { Button, Layer, Slider, Stack, TextArea, Tile } from '@carbon/react';
@@ -32,8 +33,8 @@ const categories = {
 export const AnswersComponent = () => {
   const { answers, updateAnswer, sliderValue, updateSliderValue } =
     useSoftware();
-  const [currentSectionIndex, setCurrentSectionIndex] = useState(6);
-  const [currentItemIndex, setCurrentItemIndex] = useState(5);
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+  const [currentItemIndex, setCurrentItemIndex] = useState(0);
   const [currentValue, setCurrentValue] = useState(0);
   const [currentObservation, setCurrentObservation] = useState('');
 
@@ -45,6 +46,10 @@ export const AnswersComponent = () => {
 
   const changeItemSection = (prev = false) => {
     // Actualiza la respuesta en el contexto
+    console.log('currentSection.id', currentSection.id);
+    console.log('currentItem.id', currentItem.id);
+    console.log('currentValue', currentValue);
+    console.log('currentObservation', currentObservation);
     updateAnswer(
       currentSection.id,
       currentItem.id,
@@ -104,7 +109,7 @@ export const AnswersComponent = () => {
     }
 
     // Limpia los valores actuales para la siguiente pregunta
-    setCurrentValue(0);
+    setCurrentValue(currentValue);
     setCurrentObservation('');
   };
 
@@ -199,7 +204,13 @@ export const AnswersComponent = () => {
           </Layer>
         </Tile>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginBottom: '2rem',
+        }}
+      >
         <Button
           kind={'secondary'}
           onClick={() => changeItemSection(true)}

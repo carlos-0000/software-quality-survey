@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   TextInput,
   Button,
@@ -25,7 +25,26 @@ const ParticipantsForm = () => {
     name: '',
     signature: '',
   });
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 767);
+  const [errors, setErrors] = useState({
+    position: '',
+    name: '',
+  });
 
+  // Función para actualizar el estado basado en el tamaño de la pantalla
+  const checkScreenSize = () => {
+    setIsSmallScreen(window.innerWidth < 767);
+  };
+
+  useEffect(() => {
+    // Agregar el event listener cuando el componente se monta
+    window.addEventListener('resize', checkScreenSize);
+
+    // Limpiar el event listener cuando el componente se desmonta
+    return () => {
+      window.removeEventListener('resize', checkScreenSize);
+    };
+  }, []);
   const handleNewParticipantChange = (field: string, value: string) => {
     setNewParticipant((prev) => ({
       ...prev,
@@ -34,11 +53,26 @@ const ParticipantsForm = () => {
   };
 
   const addParticipant = () => {
+    const newErrors = {
+      position: '',
+      name: '',
+    };
+
+    if (!newParticipant.position) {
+      newErrors.position = 'El cargo es obligatorio.';
+    }
+    if (!newParticipant.name) {
+      newErrors.name = 'El nombre es obligatorio.';
+    }
+
     if (!newParticipant.position || !newParticipant.name) {
+      setErrors(newErrors);
       return;
     }
+
     updateParticipants([...participants, newParticipant]);
     setNewParticipant({ position: '', name: '', signature: '' }); // Reset form after adding
+    setErrors({ position: '', name: '' }); // Reset errors
   };
 
   const removeParticipant = (index: number) => {
@@ -59,7 +93,10 @@ const ParticipantsForm = () => {
       <Tile>
         <Layer>
           <Stack gap={5}>
-            <Stack orientation={'horizontal'}>
+            <Stack
+              orientation={isSmallScreen ? 'vertical' : 'horizontal'}
+              gap={isSmallScreen ? 0 : 5}
+            >
               <TextInput
                 id="new-participant-position"
                 labelText="Cargo *"
@@ -67,6 +104,8 @@ const ParticipantsForm = () => {
                 onChange={(e) =>
                   handleNewParticipantChange('position', e.target.value)
                 }
+                invalid={!!errors.position}
+                invalidText={errors.position}
               />
               <TextInput
                 id="new-participant-name"
@@ -75,6 +114,8 @@ const ParticipantsForm = () => {
                 onChange={(e) =>
                   handleNewParticipantChange('name', e.target.value)
                 }
+                invalid={!!errors.name}
+                invalidText={errors.name}
               />
               <TextInput
                 id="new-participant-signature"

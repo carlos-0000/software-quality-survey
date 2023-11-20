@@ -17,10 +17,11 @@ import {
 import { ChangeEvent, FormEvent, useState } from 'react';
 import ParticipantsForm from '@/components/participants-form/participants-form';
 import { useSoftware } from '@/contexts';
+import { ArrowRight, ViewFilled } from '@carbon/icons-react';
 
 const HomePage = () => {
   const { push } = useRouter();
-  const { softwareInfo, updateSoftwareInfo } = useSoftware();
+  const { softwareInfo, updateSoftwareInfo, participants } = useSoftware();
   const [errors, setErrors] = useState<{ [key: string]: string }>({}); // Estado para manejar errores de validación
 
   const validateForm = () => {
@@ -50,6 +51,9 @@ const HomePage = () => {
     if (!softwareInfo.specificObjectives) {
       newErrors.specificObjectives =
         'Los objetivos específicos no pueden estar vacíos';
+    }
+    if (participants.length === 0) {
+      newErrors.participants = 'Debe haber al menos un participante';
     }
 
     setErrors(newErrors);
@@ -89,20 +93,19 @@ const HomePage = () => {
 
   return (
     <Grid condensed>
-      <Column span={8} lg={{ offset: 4 }}>
+      <Column span={12} lg={{ offset: 2 }}>
         <Stack gap={7}>
           <header>
             <Stack gap={5}>
               <h1>Plantilla Evaluación</h1>
-              <div
-                style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}
-              >
+
+              <div className="header-content">
                 <img
                   src="/img/bg.png"
-                  alt="Imagen representativa del proyecto genrada con inteligencia artificial para el proyecto USCO"
-                  style={{ maxWidth: '40%' }}
+                  alt="Imagen representativa del proyecto generada con inteligencia artificial para el proyecto USCO"
+                  className="header-image"
                 />
-                <p>
+                <p className="header-text">
                   Este aplicativo es una herramienta interactiva diseñada para
                   facilitar la evaluación y calificación de software en diversos
                   aspectos clave como rendimiento y calidad. Utilizando una
@@ -117,56 +120,52 @@ const HomePage = () => {
 
           <Form onSubmit={handleSubmit}>
             <Stack gap={7}>
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gridGap: '1rem',
-                }}
-              >
-                <DatePicker
-                  datePickerType="single"
-                  onChange={handleDateChange}
-                  style={{ width: '100%' }}
-                >
-                  <DatePickerInput
-                    id="date"
-                    labelText="Fecha"
-                    invalid={!!errors.date}
-                    invalidText={errors.date || ''}
+              <div className="input-grid">
+                <div className="input-group">
+                  <DatePicker
+                    datePickerType="single"
+                    onChange={handleDateChange}
+                    className="date-picker"
+                  >
+                    <DatePickerInput
+                      id="date"
+                      labelText="Fecha *"
+                      invalid={!!errors.date}
+                      invalidText={errors.date || ''}
+                    />
+                  </DatePicker>
+                  <TextInput
+                    id="city"
+                    labelText="Ciudad *"
+                    value={softwareInfo.city}
+                    onChange={handleChange}
+                    invalid={!!errors.city}
+                    invalidText={errors.city || ''}
+                    maxLength={255}
                   />
-                </DatePicker>
-                <TextInput
-                  id="city"
-                  labelText="Ciudad"
-                  value={softwareInfo.city}
-                  onChange={handleChange}
-                  invalid={!!errors.city}
-                  invalidText={errors.city || ''}
-                  maxLength={255}
-                />
-                <TextInput
-                  id="company"
-                  labelText="Empresa"
-                  value={softwareInfo.company}
-                  onChange={handleChange}
-                  invalid={!!errors.company}
-                  invalidText={errors.company || ''}
-                  maxLength={255}
-                />
-                <TextInput
-                  id="phone"
-                  labelText="Teléfono"
-                  value={softwareInfo.phone}
-                  onChange={handleChange}
-                  invalid={!!errors.phone}
-                  invalidText={errors.phone || ''}
-                  maxLength={255}
-                />
-                <div style={{ gridColumn: '1 / 3' }}>
+                  <TextInput
+                    id="company"
+                    labelText="Empresa *"
+                    value={softwareInfo.company}
+                    onChange={handleChange}
+                    invalid={!!errors.company}
+                    invalidText={errors.company || ''}
+                    maxLength={255}
+                  />
+                  <TextInput
+                    id="phone"
+                    labelText="Teléfono *"
+                    value={softwareInfo.phone}
+                    onChange={handleChange}
+                    invalid={!!errors.phone}
+                    invalidText={errors.phone || ''}
+                    maxLength={255}
+                  />
+                </div>
+                <div className="full-width-input">
                   <TextInput
                     id="softwareName"
-                    labelText="Nombre del Software"
+                    labelText="Nombre del Software *"
                     value={softwareInfo.softwareName}
                     onChange={handleChange}
                     invalid={!!errors.softwareName}
@@ -174,20 +173,20 @@ const HomePage = () => {
                     maxLength={255}
                   />
                 </div>
-                <div style={{ gridColumn: '1 / 3' }}>
+                <div className="full-width-input">
                   <TextArea
                     id="generalObjectives"
-                    labelText="Objetivos Generales del Software"
+                    labelText="Objetivos Generales del Software *"
                     value={softwareInfo.generalObjectives}
                     onChange={handleChange}
                     invalid={!!errors.generalObjectives}
                     invalidText={errors.generalObjectives || ''}
                   />
                 </div>
-                <div style={{ gridColumn: '1 / 3' }}>
+                <div className="full-width-input">
                   <TextArea
                     id="specificObjectives"
-                    labelText="Objetivos Específicos del Software"
+                    labelText="Objetivos Específicos del Software *"
                     value={softwareInfo.specificObjectives}
                     onChange={handleChange}
                     invalid={!!errors.specificObjectives}
@@ -198,7 +197,24 @@ const HomePage = () => {
 
               <ParticipantsForm />
 
-              <Button type="submit">Empezar</Button>
+              {errors.participants && (
+                <p style={{ color: 'red' }}>{errors.participants}</p>
+              )}
+              <div style={{ marginBottom: '2rem' }}>
+                <Button
+                  kind="secondary"
+                  renderIcon={ViewFilled}
+                  onClick={() => {
+                    push('/historial');
+                  }}
+                  style={{ marginRight: '1rem' }}
+                >
+                  Ver software evaluados
+                </Button>
+                <Button type="submit" renderIcon={ArrowRight}>
+                  Siguiente
+                </Button>
+              </div>
             </Stack>
           </Form>
         </Stack>

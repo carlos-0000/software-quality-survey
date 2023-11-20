@@ -5,7 +5,6 @@ export default async function submitSurvey(req, res) {
   console.log(';; req.method', req.method);
   if (req.method === 'POST') {
     try {
-      req.body = req.body.payload;
       console.log('sadddddddddd', req.body);
       // Insertar en software_info y obtener el ID
       const softwareInfo = req.body.softwareInfo;

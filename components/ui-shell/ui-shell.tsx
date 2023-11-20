@@ -1,7 +1,8 @@
 'use client';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
+  Button,
   Column,
   Content,
   Grid,
@@ -12,7 +13,13 @@ import {
   Row,
   SkipToContent,
 } from '@carbon/react';
-import { Asleep, Light, Switcher } from '@carbon/icons-react'; // Importa el icono que desees utilizar
+import {
+  Asleep,
+  Light,
+  Switcher,
+  TableBuilt,
+  ViewFilled,
+} from '@carbon/icons-react'; // Importa el icono que desees utilizar
 import { useTheme } from '@/contexts';
 
 interface UIShellProps {
@@ -23,6 +30,7 @@ export const UIShell: React.FC<UIShellProps> = ({ content }) => {
   const { push } = useRouter();
   const { theme, toggleTheme } = useTheme();
   const isLight = theme === 'white' || theme === 'g10';
+  // Invertir color de la imagen De logo Si el fondo es blanco
 
   useEffect(() => {
     console.log('theme', theme);
@@ -37,7 +45,7 @@ export const UIShell: React.FC<UIShellProps> = ({ content }) => {
         <SkipToContent />
         <HeaderName
           href="/"
-          prefix="Calidad de Software"
+          prefix=""
           onClick={(
             event: React.SyntheticEvent<HTMLAnchorElement, MouseEvent>,
           ) => {
@@ -45,7 +53,12 @@ export const UIShell: React.FC<UIShellProps> = ({ content }) => {
             push('/');
           }}
         >
-          USCO PRO 4K
+          <img
+            src="/img/Escudo_de_la_Universidad_Surcolombiana.svg.png"
+            alt="Logo universidad"
+            style={{ width: '2.2rem', marginRight: '0.5rem' }}
+          />
+          Calidad de Software
         </HeaderName>
         <HeaderGlobalBar>
           <HeaderGlobalAction
@@ -53,14 +66,14 @@ export const UIShell: React.FC<UIShellProps> = ({ content }) => {
             tooltipAlignment="end"
             onClick={() => push('/historial')}
           >
-            <Switcher size={20} /> {/* Icono que representa la acción */}
+            <ViewFilled size={25} />
           </HeaderGlobalAction>
           <HeaderGlobalAction
             aria-label="Toggle theme"
             tooltipAlignment="end"
             onClick={() => toggleTheme(isLight ? 'g100' : 'white')}
           >
-            {isLight ? <Asleep size={20} /> : <Light size={20} />}
+            {isLight ? <Asleep size={25} /> : <Light size={20} />}
           </HeaderGlobalAction>
         </HeaderGlobalBar>
       </Header>

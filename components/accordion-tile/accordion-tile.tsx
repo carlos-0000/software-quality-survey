@@ -1,18 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // @ts-ignore
 import { Button, Layer, Tile } from '@carbon/react';
 import { ChevronDown, ChevronUp } from '@carbon/icons-react';
 // @ts-ignore
 import * as motion from '@carbon/motion';
+import { useSoftware } from '@/contexts';
 
-type AccordionTileProps = React.PropsWithChildren<{ title: string }>;
+type AccordionTileProps = React.PropsWithChildren<{
+  title: string;
+  isOpenProp?: boolean;
+}>;
 
 export const AccordionTile: React.FC<AccordionTileProps> = ({
   title,
   children,
+  isOpenProp = true,
 }) => {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(isOpenProp);
+  const { surveyFinished } = useSoftware();
 
+  useEffect(() => {
+    setIsOpen(isOpenProp);
+  }, [surveyFinished]);
   return (
     <Tile>
       <Layer

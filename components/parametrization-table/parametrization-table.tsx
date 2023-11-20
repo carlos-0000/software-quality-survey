@@ -12,10 +12,11 @@ import {
   TableCell,
   TextInput,
 } from '@carbon/react';
-import { useSoftware } from '@/contexts'; // Asegúrate de importar correctamente el contexto
+import { useSoftware } from '@/contexts';
+import { AccordionTile } from '@/components'; // Asegúrate de importar correctamente el contexto
 
 const ParametrizationTable = () => {
-  const { parametrization, updateParameter } = useSoftware();
+  const { parametrization, updateParameter, surveyFinished } = useSoftware();
   const [totalError, setTotalError] = useState(false);
 
   useEffect(() => {
@@ -35,79 +36,91 @@ const ParametrizationTable = () => {
     }
   };
 
+  useEffect(() => {
+    console.log('surveyFinished', surveyFinished);
+  }, [surveyFinished]);
+
   return (
-    <Accordion>
-      <AccordionItem open={false} title="Parametrización Tabla">
-        <TableContainer
-          title="Parametrización Tabla"
-          style={{ overflowX: 'auto' }}
-        >
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableHeader>ID</TableHeader>
-                <TableHeader>Item</TableHeader>
-                <TableHeader>Descripción</TableHeader>
-                <TableHeader>Preguntas</TableHeader>
-                <TableHeader>(%) Total</TableHeader>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {parametrization.map((param) => (
-                <TableRow key={param.id}>
-                  <TableCell>{param.id}</TableCell>
-                  <TableCell>{param.item}</TableCell>
-                  <TableCell>{param.description}</TableCell>
-                  <TableCell>{param.questions}</TableCell>
-                  <TableCell>
-                    <TextInput
-                      id={`percentage-${param.id}`}
-                      labelText={'ssss'}
-                      hideLabel
-                      value={param.totalPercentage.toString()}
-                      onChange={(e) =>
-                        handlePercentageChange(param.id, e.target.value)
-                      }
-                      onBlur={(e) =>
-                        handlePercentageChange(param.id, e.target.value)
-                      }
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          (e.target as HTMLInputElement).blur();
-                        }
-                      }}
-                      size="sm"
-                      invalid={totalError}
-                      invalidText=""
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
-              <TableRow>
-                <TableCell colSpan={4}>
-                  {parametrization.reduce(
-                    (acc, param) => acc + param.totalPercentage,
-                    0,
-                  ) !== 100 ? (
-                    <span style={{ color: 'red' }}>
-                      El porcentaje Total debe ser igual a 100%
-                    </span>
-                  ) : (
-                    'Total'
-                  )}
+    <AccordionTile title={'Configurar parámetros'} isOpenProp={surveyFinished}>
+      <p style={{ display: 'block', paddingBlockStart: '1rem' }}>
+        Seleccione los porcentajes para cada indicador según el tipo de software
+        a evaluar. Por ejemplo, en un software bancario, podría enfocarse más en
+        Funcionalidad y Eficiencia, mientras que para un software educativo o de
+        capacitación, los indicadores de Usabilidad, Calidad en Uso y
+        Portabilidad podrían ser más relevantes. Esta tabla ajustable le permite
+        personalizar los criterios de evaluación para cada una de las siete
+        secciones, proporcionando flexibilidad para adaptarse a diferentes
+        necesidades y tipos de software.
+      </p>
+      <TableContainer>
+        <Table size={'sm'}>
+          <TableHead>
+            <TableRow>
+              <TableHeader>ID</TableHeader>
+              <TableHeader>Item</TableHeader>
+              <TableHeader>Descripción</TableHeader>
+              <TableHeader>Preguntas</TableHeader>
+              <TableHeader>(%) Total</TableHeader>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {parametrization.map((param) => (
+              <TableRow key={param.id}>
+                <TableCell>{param.id}</TableCell>
+                <TableCell>{param.item}</TableCell>
+                <TableCell style={{ minWidth: '300px' }}>
+                  {param.description}
                 </TableCell>
-                <TableCell style={{ color: totalError ? 'red' : 'inherit' }}>
-                  {parametrization
-                    .reduce((acc, param) => acc + param.totalPercentage, 0)
-                    .toFixed(2)}
-                  %
+                <TableCell>{param.questions}</TableCell>
+                <TableCell>
+                  <TextInput
+                    id={`percentage-${param.id}`}
+                    labelText={'ssss'}
+                    hideLabel
+                    value={param.totalPercentage.toString()}
+                    onChange={(e) =>
+                      handlePercentageChange(param.id, e.target.value)
+                    }
+                    onBlur={(e) =>
+                      handlePercentageChange(param.id, e.target.value)
+                    }
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        (e.target as HTMLInputElement).blur();
+                      }
+                    }}
+                    size="sm"
+                    style={{ flexShrink: 0, width: '4.6rem' }}
+                    invalid={totalError}
+                    invalidText=""
+                  />
                 </TableCell>
               </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </AccordionItem>
-    </Accordion>
+            ))}
+            <TableRow>
+              <TableCell colSpan={4}>
+                {parametrization.reduce(
+                  (acc, param) => acc + param.totalPercentage,
+                  0,
+                ) !== 100 ? (
+                  <span style={{ color: 'red' }}>
+                    El porcentaje Total debe ser igual a 100%
+                  </span>
+                ) : (
+                  'Total'
+                )}
+              </TableCell>
+              <TableCell style={{ color: totalError ? 'red' : 'inherit' }}>
+                {parametrization
+                  .reduce((acc, param) => acc + param.totalPercentage, 0)
+                  .toFixed(2)}
+                %
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </AccordionTile>
   );
 };
 

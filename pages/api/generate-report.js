@@ -21,26 +21,52 @@ export default async function generateReport(req, res) {
       //const resultData =
       // await sql`SELECT * FROM result_data WHERE software_info_id = ${softwareInfoId}`;
       //  inner join result_data on parametrization.software_info_id = result_data.software_info_id
-      const resultData = await sql`
-        SELECT parametrization.software_info_id,
-        parametrization.item,
-        parametrization.description,
-         result_data.value,
-         result_data.maximum,
-          result_data.percent_result,
-           result_data.percent_maximum,
-            result_data.percent_global
-        FROM parametrization
-        INNER JOIN result_data ON parametrization.software_info_id = result_data.software_info_id
-        WHERE parametrization.software_info_id = ${softwareInfoId}
-      `;
+      // const resultData = await sql`
+      //   SELECT
+      //   parametrization.software_info_id,
+      //   parametrization.item,
+      //   parametrization.description,
+      //    result_data.value,
+      //    result_data.maximum,
+      //     result_data.percent_result,
+      //      result_data.percent_maximum,
+      //       result_data.percent_global
+      //   FROM parametrization
+      //   INNER JOIN result_data ON parametrization.software_info_id = result_data.software_info_id
+      //   WHERE parametrization.software_info_id = ${softwareInfoId}
+      // `;
+
+      const parametrizationData = await sql`
+  SELECT
+  parametrization.software_info_id AS id_software,
+  parametrization.item AS item,
+  parametrization.description AS description
+   FROM parametrization WHERE software_info_id = ${softwareInfoId};
+`;
+
+      const { rows } = await sql`
+  SELECT * FROM result_data WHERE software_info_id = ${softwareInfoId};
+`;
+
+      const combinedData = parametrizationData.rows.map((param, index) => {
+        const result = rows[index];
+        return {
+          ...param,
+          value: result.value,
+          maximum: result.maximum,
+          percent_result: result.percent_result,
+          percent_maximum: result.percent_maximum,
+          percent_global: result.percent_global,
+        };
+      });
+
       // Crear un libro de trabajo Excel
       const workbook = new ExcelJS.Workbook();
       console.log('softwareInfo', softwareInfo);
       console.log('participants', participants);
       console.log('answers', answers);
       console.log('parametrization', parametrization);
-      console.log('resultData', resultData);
+      console.log('resultData', combinedData);
       // Agregar datos al libro de trabajo para cada tabla
       addSheetToWorkbook(workbook, 'Software Info', softwareInfo.rows, [
         'ID',
@@ -78,7 +104,7 @@ export default async function generateReport(req, res) {
         'Preguntas',
         'Porcentaje Total',
       ]);
-      addSheetToWorkbook(workbook, 'Resultados', resultData.rows, [
+      addSheetToWorkbook(workbook, 'Resultados', combinedData, [
         'ID Software',
         'Ítem',
         'Descripción',

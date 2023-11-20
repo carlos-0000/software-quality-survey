@@ -10,6 +10,7 @@ import React, {
 // Tipos de datos proporcionados
 type ContextType = {
   sliderValue: number;
+  surveyFinished: boolean;
   softwareInfo: {
     date: string;
     city: string;
@@ -47,6 +48,7 @@ type ContextType = {
   };
 
   updateSliderValue: (value: number) => void;
+  updateSurveyFinished: (value: boolean) => void;
   updateSoftwareInfo: (info: typeof defaultContext.softwareInfo) => void;
   updateParticipants: (parts: typeof defaultContext.participants) => void;
   updateParametrization: (param: typeof defaultContext.parametrization) => void;
@@ -63,6 +65,7 @@ type ContextType = {
 // Estado inicial por defecto
 const defaultContext: ContextType = {
   sliderValue: 50,
+  surveyFinished: true,
   softwareInfo: {
     date: '',
     city: '',
@@ -456,6 +459,7 @@ const defaultContext: ContextType = {
     ],
   },
   updateSliderValue: () => {},
+  updateSurveyFinished: () => {},
   updateSoftwareInfo: () => {},
   updateParticipants: () => {},
   updateParametrization: () => {},
@@ -474,6 +478,9 @@ export const SoftwareProvider = ({
   children: React.ReactNode;
 }) => {
   const [sliderValue, setSliderValue] = useState(defaultContext.sliderValue);
+  const [surveyFinished, setSurveyFinished] = useState(
+    defaultContext.surveyFinished,
+  );
   const [softwareInfo, setSoftwareInfo] = useState(defaultContext.softwareInfo);
   const [participants, setParticipants] = useState(defaultContext.participants);
   const [parametrization, setParametrization] = useState(
@@ -483,6 +490,10 @@ export const SoftwareProvider = ({
 
   const updateSliderValue = useCallback((value: number) => {
     setSliderValue(value);
+  }, []);
+
+  const updateSurveyFinished = useCallback((value: boolean) => {
+    setSurveyFinished(value);
   }, []);
 
   // Funciones para actualizar el estado
@@ -550,6 +561,8 @@ export const SoftwareProvider = ({
     () => ({
       sliderValue,
       updateSliderValue,
+      surveyFinished,
+      updateSurveyFinished,
       softwareInfo,
       updateSoftwareInfo,
       participants,
@@ -561,7 +574,14 @@ export const SoftwareProvider = ({
       updateAnswers,
       updateAnswer,
     }),
-    [softwareInfo, participants, parametrization, answers, sliderValue],
+    [
+      softwareInfo,
+      participants,
+      parametrization,
+      answers,
+      sliderValue,
+      surveyFinished,
+    ],
   );
 
   return (
