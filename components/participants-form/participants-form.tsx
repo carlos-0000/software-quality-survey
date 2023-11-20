@@ -22,6 +22,8 @@ import { useSoftware } from '@/contexts';
 import { Add, TrashCan } from '@carbon/icons-react';
 
 const ParticipantsForm = () => {
+  // const [isClient, setIsClient] = useState(false);
+
   const { participants, updateParticipants } = useSoftware();
   const [newParticipant, setNewParticipant] = useState({
     position: '',
@@ -35,11 +37,11 @@ const ParticipantsForm = () => {
   });
 
   // Función para actualizar el estado basado en el tamaño de la pantalla
-  const checkScreenSize = () => {
-    setIsSmallScreen(window.innerWidth < 767);
-  };
 
   useEffect(() => {
+    const checkScreenSize = () => {
+      setIsSmallScreen(window.innerWidth < 767);
+    };
     // Agregar el event listener cuando el componente se monta
     window.addEventListener('resize', checkScreenSize);
 
