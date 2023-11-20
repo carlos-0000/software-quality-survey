@@ -207,7 +207,7 @@ const HomePage = () => {
                   onClick={() => {
                     push('/historial');
                   }}
-                  style={{ marginRight: '1rem' }}
+                  style={{ marginRight: '1rem', marginBottom: '1rem' }}
                 >
                   Ver software evaluados
                 </Button>
