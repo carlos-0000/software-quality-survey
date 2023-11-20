@@ -19,6 +19,7 @@ import {
   Tag,
 } from '@carbon/react';
 import { TableBuilt } from '@carbon/icons-react';
+import { AccordionTile } from '@/components';
 const SoftwareInfoTable = () => {
   const [softwareInfoData, setSoftwareInfoData] = useState([]);
 
@@ -134,62 +135,63 @@ const SoftwareInfoTable = () => {
               </div>
             </Stack>
           </header>
-          <DataTable rows={rows} headers={headers} isSortable>
-            {({
-              rows,
-              headers,
-              getHeaderProps,
-              getRowProps,
-              getTableProps,
-            }) => (
-              <TableContainer
-                title="Información del Software"
-                style={{ marginBottom: '2rem' }}
-              >
-                <TableToolbar>
-                  {/* Agrega contenido adicional al toolbar si es necesario */}
-                  <TableToolbarContent>
-                    {/* Puedes agregar botones u otros elementos aquí */}
-                  </TableToolbarContent>
-                </TableToolbar>
-                <Table {...getTableProps()}>
-                  <TableHead>
-                    <TableRow>
-                      {headers.map((header, index) => (
-                        // @ts-ignore Carbon xd
-                        <TableHeader
-                          {...getHeaderProps({ header })}
-                          key={index}
-                        >
-                          {header.header}
-                        </TableHeader>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.map((row, key) => (
-                      // @ts-ignore Carbon xd
-                      <TableRow {...getRowProps({ row })} key={key}>
-                        {row.cells.map((cell) => (
-                          <TableCell key={cell.id}>
-                            {cell.info.header === 'total_percent_global' ? (
-                              <Tag
-                                className={getTagClassName(Number(cell.value))}
-                              >
-                                {`${cell.value}%`}
-                              </Tag>
-                            ) : (
-                              cell.value
-                            )}
-                          </TableCell>
+          <AccordionTile title={'Historial de Evaluaciones'} isOpenProp={true}>
+            <DataTable rows={rows} headers={headers} isSortable>
+              {({
+                rows,
+                headers,
+                getHeaderProps,
+                getRowProps,
+                getTableProps,
+              }) => (
+                <TableContainer>
+                  <TableToolbar>
+                    {/* Agrega contenido adicional al toolbar si es necesario */}
+                    <TableToolbarContent>
+                      {/* Puedes agregar botones u otros elementos aquí */}
+                    </TableToolbarContent>
+                  </TableToolbar>
+                  <Table {...getTableProps()}>
+                    <TableHead>
+                      <TableRow>
+                        {headers.map((header, index) => (
+                          // @ts-ignore Carbon xd
+                          <TableHeader
+                            {...getHeaderProps({ header })}
+                            key={index}
+                          >
+                            {header.header}
+                          </TableHeader>
                         ))}
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            )}
-          </DataTable>
+                    </TableHead>
+                    <TableBody>
+                      {rows.map((row, key) => (
+                        // @ts-ignore Carbon xd
+                        <TableRow {...getRowProps({ row })} key={key}>
+                          {row.cells.map((cell) => (
+                            <TableCell key={cell.id}>
+                              {cell.info.header === 'total_percent_global' ? (
+                                <Tag
+                                  className={getTagClassName(
+                                    Number(cell.value),
+                                  )}
+                                >
+                                  {`${cell.value}%`}
+                                </Tag>
+                              ) : (
+                                cell.value
+                              )}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              )}
+            </DataTable>
+          </AccordionTile>
         </Stack>
       </Column>
     </Grid>
