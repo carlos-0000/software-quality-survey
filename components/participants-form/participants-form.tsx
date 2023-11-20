@@ -1,7 +1,4 @@
-// @ts-nocheck
-'use client';
 import React, { useEffect, useState } from 'react';
-
 import {
   TextInput,
   Button,
@@ -22,36 +19,17 @@ import { useSoftware } from '@/contexts';
 import { Add, TrashCan } from '@carbon/icons-react';
 
 const ParticipantsForm = () => {
-  const [isClient, setIsClient] = useState(false);
-
   const { participants, updateParticipants } = useSoftware();
   const [newParticipant, setNewParticipant] = useState({
     position: '',
     name: '',
     signature: '',
   });
-  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 767);
   const [errors, setErrors] = useState({
     position: '',
     name: '',
   });
 
-  // Función para actualizar el estado basado en el tamaño de la pantalla
-
-  useEffect(() => {
-    setIsClient(true);
-    const checkScreenSize = () => {
-      setIsSmallScreen(window.innerWidth < 767);
-    };
-    checkScreenSize();
-    // Agregar el event listener cuando el componente se monta
-    window.addEventListener('resize', checkScreenSize);
-
-    // Limpiar el event listener cuando el componente se desmonta
-    return () => {
-      window.removeEventListener('resize', checkScreenSize);
-    };
-  }, []);
   const handleNewParticipantChange = (field: string, value: string) => {
     setNewParticipant((prev) => ({
       ...prev,
@@ -97,91 +75,86 @@ const ParticipantsForm = () => {
   return (
     <Stack gap={5}>
       <h3>Participantes</h3>
-      {isClient && (
-        <Tile>
-          <Layer>
-            <Stack gap={5}>
-              <Stack
-                orientation={isSmallScreen ? 'vertical' : 'horizontal'}
-                gap={isSmallScreen ? 0 : 5}
-              >
-                <TextInput
-                  id="new-participant-position"
-                  labelText="Cargo *"
-                  value={newParticipant.position}
-                  onChange={(e) =>
-                    handleNewParticipantChange('position', e.target.value)
-                  }
-                  invalid={!!errors.position}
-                  invalidText={errors.position}
-                />
-                <TextInput
-                  id="new-participant-name"
-                  labelText="Nombre *"
-                  value={newParticipant.name}
-                  onChange={(e) =>
-                    handleNewParticipantChange('name', e.target.value)
-                  }
-                  invalid={!!errors.name}
-                  invalidText={errors.name}
-                />
-                <TextInput
-                  id="new-participant-signature"
-                  labelText="Firma"
-                  value={newParticipant.signature}
-                  onChange={(e) =>
-                    handleNewParticipantChange('signature', e.target.value)
-                  }
-                />
-                <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-                  <Button onClick={addParticipant} renderIcon={Add} size={'md'}>
-                    Agregar
-                  </Button>
-                </div>
-              </Stack>
-
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      {headers.map((header, index) => (
-                        <TableHeader key={index}>{header.header}</TableHeader>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {!participants || participants.length === 0 ? (
-                      <TableRow>
-                        <TableCell colSpan={4}>No hay participantes</TableCell>
-                      </TableRow>
-                    ) : (
-                      participants.map((participant, index) => (
-                        <TableRow key={index}>
-                          <TableCell>{participant.position}</TableCell>
-                          <TableCell>{participant.name}</TableCell>
-                          <TableCell>{participant.signature}</TableCell>
-                          <TableCell>
-                            <Button
-                              kind="danger"
-                              onClick={() => removeParticipant(index)}
-                              size={'sm'}
-                              renderIcon={TrashCan}
-                              hasIconOnly={true}
-                              iconDescription={'Eliminar'}
-                            >
-                              Eliminar
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+      <Tile>
+        <Layer>
+          <Stack gap={5}>
+            <Stack orientation={'vertical'} gap={5}>
+              <TextInput
+                id="new-participant-position"
+                labelText="Cargo *"
+                value={newParticipant.position}
+                onChange={(e) =>
+                  handleNewParticipantChange('position', e.target.value)
+                }
+                invalid={!!errors.position}
+                invalidText={errors.position}
+              />
+              <TextInput
+                id="new-participant-name"
+                labelText="Nombre *"
+                value={newParticipant.name}
+                onChange={(e) =>
+                  handleNewParticipantChange('name', e.target.value)
+                }
+                invalid={!!errors.name}
+                invalidText={errors.name}
+              />
+              <TextInput
+                id="new-participant-signature"
+                labelText="Firma"
+                value={newParticipant.signature}
+                onChange={(e) =>
+                  handleNewParticipantChange('signature', e.target.value)
+                }
+              />
+              <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                <Button onClick={addParticipant} renderIcon={Add} size={'md'}>
+                  Agregar
+                </Button>
+              </div>
             </Stack>
-          </Layer>
-        </Tile>
-      )}
+
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    {headers.map((header, index) => (
+                      <TableHeader key={index}>{header.header}</TableHeader>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {!participants || participants.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={4}>No hay participantes</TableCell>
+                    </TableRow>
+                  ) : (
+                    participants.map((participant, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{participant.position}</TableCell>
+                        <TableCell>{participant.name}</TableCell>
+                        <TableCell>{participant.signature}</TableCell>
+                        <TableCell>
+                          <Button
+                            kind="danger"
+                            onClick={() => removeParticipant(index)}
+                            size={'sm'}
+                            renderIcon={TrashCan}
+                            hasIconOnly={true}
+                            iconDescription={'Eliminar'}
+                          >
+                            Eliminar
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Stack>
+        </Layer>
+      </Tile>
     </Stack>
   );
 };
