@@ -17,7 +17,7 @@ type ContextType = {
 };
 
 const defaultContext: ContextType = {
-  theme: 'white',
+  theme: 'g100',
   toggleTheme: () => {
     /* Comment for avoid eslint error for empty function */
   },
