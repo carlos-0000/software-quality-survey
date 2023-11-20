@@ -19,7 +19,7 @@ import {
   Tag,
 } from '@carbon/react';
 import { TableBuilt } from '@carbon/icons-react';
-import { AccordionTile } from '@/components';
+import { AccordionTile, AsyncButton } from '@/components';
 const SoftwareInfoTable = () => {
   const [softwareInfoData, setSoftwareInfoData] = useState([]);
 
@@ -100,13 +100,12 @@ const SoftwareInfoTable = () => {
     (info: { [key: string]: number | string }) => ({
       ...info,
       actions: (
-        <Button
-          kind="secondary"
-          onClick={() => handleDownloadReport(info.id as number)}
+        <AsyncButton
+          action={() => handleDownloadReport(info.id as number)}
           renderIcon={TableBuilt}
         >
           Descargar Reporte
-        </Button>
+        </AsyncButton>
       ),
     }),
   );
