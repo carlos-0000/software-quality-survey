@@ -176,6 +176,10 @@ const SoftwareInfoTable = () => {
                                   className={getTagClassName(
                                     Number(cell.value),
                                   )}
+                                  style={{
+                                    flexShrink: 0,
+                                    width: '4.6rem',
+                                  }}
                                 >
                                   {`${cell.value}%`}
                                 </Tag>
